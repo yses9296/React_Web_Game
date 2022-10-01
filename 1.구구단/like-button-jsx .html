@@ -22,7 +22,14 @@
         const LikeButton = () => { //this 사용할 일이 없다.
             // function LikeButton(){
             const [liked, setLiked] = React.useState(false); //구조분해
-            // const [state, setState]
+            // >> const [state, setState]
+            
+            //네이버 예시
+            // const [news, setNews] =React.useState['News1', 'News2', 'News3'  ]
+            // const [category, setCategory] =React.useState['스포츠', '연예', '경제']
+            // if(category == '경제'){
+            //     return ()
+            // }
 
             if(liked){
                 return 'Like Clicked'
