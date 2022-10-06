@@ -25,6 +25,10 @@
             }
 
 
+            input;
+
+            handleFocus = (c) => {this.input = c;}
+
             handleChange = (e) => {
                 this.setState({value: e.target.value});
             }
@@ -32,14 +36,15 @@
             handleCalculate = (e) => {
                 e.preventDefault();
                 if(parseInt(this.state.value) === this.state.firstNum * this.state.secondNum){
-                    this.setState(
-                        {
-                            result: this.state.firstNum +"X"+ this.state.secondNum +"="+this.state.value + " is Correct!",
+                    this.setState( (prevState) => {
+                        return {
+                            result: prevState.firstNum +"X"+ prevState.secondNum +"="+prevState.value + " is Correct!",
                             firstNum: Math.ceil(Math.random() * 9),
                             secondNum: Math.ceil(Math.random() * 9),
                             value: '',
                         }
-                    )
+                    });
+                    this.input.focus();
                 }
                 else {
                     this.setState(
@@ -47,16 +52,19 @@
                             result: 'Wrong!',
                             value: '',
                         }
-                    )
+                    );
+                    this.input.focus();
                 }
             }
+
+
 
             render(){
                 return(
                     <div>
                         <p>{this.state.firstNum} X {this.state.secondNum} =</p>
                         <form onSubmit={this.handleCalculate}>
-                            <input type="number" value={this.state.value}  onChange={this.handleChange} />
+                            <input ref={this.handleFocus} type="number" value={this.state.value}  onChange={this.handleChange} />
                             <button type="submit">Submit</button>
                         </form>
                         <p>{this.state.result}</p>
