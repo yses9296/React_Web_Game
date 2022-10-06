@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hooks Tutorial #2-1</title>
+</head>
+<body>
+    <div id="root"></div>
+    <!-- Script -->
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script type="text/babel">
+
+        const Hooks = () => {
+            const [firstNum, setFirstNum] = React.useState(Math.ceil(Math.random() * 9) );
+            const [secondNum, setSecondNum] = React.useState(Math.ceil(Math.random() * 9) );
+            const [value, setValue] = React.useState('');
+            const [result, setResult] = React.useState('');
+            const inputRef = React.useRef(null);
+
+            const handleChange = (e) => {
+                setValue(e.target.value)
+            }
+            const handleCalculate = (e) => {
+                e.preventDefault();
+                if(parseInt(value) === firstNum * secondNum){
+
+                    setResult(firstNum + " x " + secondNum + " = "+ value + ' is Correct!');
+                    setValue('');
+                    setFirstNum(Math.ceil(Math.random() * 9));
+                    secondNum(Math.ceil(Math.random() * 9));
+                    inputRef.current.focus();
+                }
+                else {
+                    setResult('Wrong');
+                    setValue('');
+                    inputRef.current.focus();
+                }
+            }
+            return (
+                <React.Fragment>
+                    <p>{firstNum} X {secondNum} =</p>
+                    <form onSubmit={handleCalculate}>
+                        <input ref={inputRef} type="number" value={value} onChange={handleChange} />
+                        <button type="submit">Submit</button>
+                    </form>
+                    <p>{result}</p>
+                </React.Fragment>
+            )
+        }
+
+    </script>
+    <script type="text/babel">
+        ReactDOM.render(<Hooks/>, document.querySelector('#root'))
+    </script>
+    
+</body>
+</html>
