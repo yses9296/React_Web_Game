@@ -10,7 +10,7 @@ class WordRelay extends Component {
     }
     render() {
         return (
-        <div>This is WordRelay Component</div>
+            <div>This is WordRelay Component</div>
         )
     }
 }
