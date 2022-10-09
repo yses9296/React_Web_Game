@@ -6,7 +6,7 @@ class WordRelay extends Component {
     constructor(props){
         super(props);
         this.state = {
-            word: '컴퓨터',
+            word: '사자',
             value: '',
             result: ''
         };
@@ -40,14 +40,14 @@ class WordRelay extends Component {
 
     render(){
         return(
-            <>
+            <div className='container'>
                 <div>{this.state.word}</div>
                 <form onSubmit={this.onSubmitForm}>
                     <input type="text" placeholder='Enter the word' onChange={this.onChange} value={this.state.value} ref={this.onRefInput}/>
                     <button>Submit</button>
                 </form>
                 <div>{this.state.result}</div>
-            </>
+            </div>
         )
     }
 }

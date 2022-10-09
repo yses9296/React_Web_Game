@@ -51,7 +51,7 @@ module.exports = {
         //     directory: path.join(__dirname, 'dist'),
         //     publicPath: '/dist/',
         // },
-        // publicPath: '/dist/',
+
         devMiddleware: {
             publicPath: '/dist/'
         },
