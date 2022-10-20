@@ -43,9 +43,13 @@ class NumberBaseball extends Component {
         else{
             if(this.state.tries.length >= 9){
                 this.setState({
+                    result: `You tried over ten times.`,
+                })
+                alert(`You tried over ten times. The answer was ${this.state.answer.join('')}. Try it Again`) // alert 후 다시 렌더링
+                this.setState({
                     answer : getNumbers(),
                     value: '',
-                    result: 'You tried overthen times, Try it Again',
+                    result: '',
                     tries: []
                 })
             }
