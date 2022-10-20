@@ -83,7 +83,7 @@ class NumberBaseball extends Component {
     render(){
         return (
             <div>
-                <p>Retrun React</p>
+                <p>Number Baseball Game</p>
                 <form onSubmit={this.onSubmit}>
                     <input type="text" maxLength={4} minLength={4} value={this.state.value} onChange={this.onChange} ref={this.onRefInput} />
                     <button>Submit</button>
