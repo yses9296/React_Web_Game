@@ -19,14 +19,7 @@ class NumberBaseball extends Component {
         result: '',
         tries: []
     }
-    // setReset = () => {
-    //     this.setState({
-    //         answer : getNumbers(),
-    //         value: '',
-    //         result: '',
-    //         tries: []
-    //     })
-    // }
+
     onChange = (e) => {
         this.setState({
             value : e.target.value
@@ -39,15 +32,13 @@ class NumberBaseball extends Component {
                 result: 'HomeRun!',
                 tries: [...this.state.tries, { try: this.state.value, result: 'HomeRun'}]
             })
-            alert("Game ReStart")
+            alert("Game Restart") // alert 후 다시 렌더링
             this.setState({
                 answer : getNumbers(),
                 value: '',
                 result: '',
                 tries: []
             })
-
-            // this.setReset()
         }
         else{
             if(this.state.tries.length >= 9){
