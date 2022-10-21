@@ -1,5 +1,6 @@
 import  React, { Component, useState, useRef, useCallback }  from 'react';
-import Try from './Try';
+import Try from './components/TryClass';
+// import Try from './components/Try';
 
 function getNumbers(){
     const numbers = Array(9).fill().map( (v, i) => v = i + 1); //1부터 9까지 숫자 배열 생성

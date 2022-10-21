@@ -1,5 +1,5 @@
 import  React, { Component, useState, useRef, useCallback }  from 'react';
-import Try from './Try';
+import Try from './components/Try';
 
 function getNumbers(){
     const numbers = Array(9).fill().map( (v, i) => v = i + 1); //1부터 9까지 숫자 배열 생성
@@ -101,7 +101,7 @@ class NumberBaseball extends Component {
                 <ul>
                     { this.state.tries.map( (v, i) => {
                         // <Try key={i} tryInfo={v} index={i}></Try>  //component로 불러오기
-                        // return (<li key={i}> {v.try} {v.result}</li>)
+                        return (<li key={i}> {v.try} {v.result}</li>)
                     })}
                 </ul>
 
