@@ -100,8 +100,8 @@ class NumberBaseball extends Component {
                 <p>Try: {this.state.tries.length}</p>
                 <ul>
                     { this.state.tries.map( (v, i) => {
-                        // <Try key={v} value={v} index={i}></Try>  //component로 불러오기
-                        return (<li key={i}> {v.try} {v.result}</li>)
+                        // <Try key={i} tryInfo={v} index={i}></Try>  //component로 불러오기
+                        // return (<li key={i}> {v.try} {v.result}</li>)
                     })}
                 </ul>
 

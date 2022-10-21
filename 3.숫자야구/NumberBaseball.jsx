@@ -85,115 +85,16 @@ const NumberBaseball = () => {
             </form>
             <p>Try: {tries.length}</p>
             <ul>
-                { tries.map( (v, i) => {
-                    // <Try key={v} value={v} index={i}></Try>  //component로 불러오기
-                    return (<li key={i}> {v.try} {v.result}</li>)
-                })}
+                { tries.map( (v, i) => (
+                    <Try key={i} tryInfo={v} index={i}></Try>  //component로 불러오기 () 소괄호
+                    // return (<li key={i}> {v.try} {v.result}</li>) // {} 중괄호 변경
+                ))}
             </ul>
 
             <p>{result}</p>
         </div>
     )
 }
-
-// class NumberBaseball extends Component {
-//     state = {
-//         answer : getNumbers(),
-//         value: '',
-//         result: '',
-//         tries: []
-//     }
-
-//     onChange = (e) => {
-//         this.setState({
-//             value : e.target.value
-//         })
-//     }
-//     onSubmit = (e) => {
-//         e.preventDefault();
-//         if(this.state.value === this.state.answer.join('')){
-//             this.setState( (prevState) => {
-//                 return {
-//                     result: 'HomeRun!',
-//                     tries: [...prevState.tries, { try: this.state.value, result: 'HomeRun'}]
-//                 }
-//             })
-//             alert("HomeRun! Game Restart") // alert 후 다시 렌더링
-//             this.setState({
-//                 answer : getNumbers(),
-//                 value: '',
-//                 result: '',
-//                 tries: []
-//             })
-//         }
-//         else{
-//             if(this.state.tries.length >= 9){
-//                 this.setState({
-//                     result: `You tried over ten times.`,
-//                 })
-//                 alert(`You tried over ten times. The answer was ${this.state.answer.join('')}. Try it Again`) // alert 후 다시 렌더링
-//                 this.setState({
-//                     answer : getNumbers(),
-//                     value: '',
-//                     result: '',
-//                     tries: []
-//                 })
-//             }
-//             else {
-//                 var inputArr = this.state.value.split('').map( v => parseInt(v) ); //입력한 숫자를 배열로 변환
-//                 let strike = 0;
-//                 let ball = 0;
-        
-//                 for (let i = 0; i < 4; i++){
-//                     if(inputArr[i] === this.state.answer[i]){
-//                         strike++;
-//                     }
-//                     else if(this.state.answer.includes(inputArr[i])){
-//                         ball++;
-//                     }
-//                 }
-//                 this.setState( (prevState) => {
-//                     return {
-//                             tries: [...prevState.tries, {
-//                                 try: this.state.value,                        
-//                                 result: strike + ' Strike, ' + ball + ' Ball'
-//                             }],
-//                             value: '',
-//                             result: ''
-                        
-//                     }
-//                 })
-//                 this.input.focus();
-//             }
-//         }
-//     }
-
-//     input;
-//     onRefInput = (c) => {
-//         this.input = c;
-//     }
-
-//     render(){
-//         return (
-//             <div>
-//                 <p>Number Baseball Game</p>
-//                 <form onSubmit={this.onSubmit}>
-//                     <input type="text" maxLength={4} minLength={4} value={this.state.value} onChange={this.onChange} ref={this.onRefInput} />
-//                     <button>Submit</button>
-//                 </form>
-//                 <p>Try: {this.state.tries.length}</p>
-//                 <ul>
-//                     { this.state.tries.map( (v, i) => {
-//                         // <Try key={v} value={v} index={i}></Try>  //component로 불러오기
-//                         return (<li key={i}> {v.try} {v.result}</li>)
-//                     })}
-//                 </ul>
-
-//                 <p>{this.state.result}</p>
-//             </div>
-//         )
-//     }
-// }
 
 // module.exports = NumberBaseball //require 사용할 때
 export default NumberBaseball; //import를 사용할 때
