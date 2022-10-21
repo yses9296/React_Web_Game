@@ -28,11 +28,13 @@ class NumberBaseball extends Component {
     onSubmit = (e) => {
         e.preventDefault();
         if(this.state.value === this.state.answer.join('')){
-            this.setState({
-                result: 'HomeRun!',
-                tries: [...this.state.tries, { try: this.state.value, result: 'HomeRun'}]
+            this.setState( (prevState) => {
+                return {
+                    result: 'HomeRun!',
+                    tries: [...prevState.tries, { try: this.state.value, result: 'HomeRun'}]
+                }
             })
-            alert("Game Restart") // alert 후 다시 렌더링
+            alert("HomeRun! Game Restart") // alert 후 다시 렌더링
             this.setState({
                 answer : getNumbers(),
                 value: '',
@@ -66,13 +68,16 @@ class NumberBaseball extends Component {
                         ball++;
                     }
                 }
-                this.setState({
-                    tries: [...this.state.tries, {
-                        try: this.state.value,                        
-                        result: strike + ' Strike, ' + ball + ' Ball'
-                    }],
-                    value: '',
-                    result: ''
+                this.setState( (prevState) => {
+                    return {
+                            tries: [...prevState.tries, {
+                                try: this.state.value,                        
+                                result: strike + ' Strike, ' + ball + ' Ball'
+                            }],
+                            value: '',
+                            result: ''
+                        
+                    }
                 })
                 this.input.focus();
             }
