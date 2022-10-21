@@ -1,19 +1,35 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 
-class RenderTest extends Component {
+class RenderTest extends PureComponent {
     state = {
         counter: 0,
+        string: 'Hello',
+        number: 1,
+        boolean: true,
+        object: {},
+        array1: []
     }
-    shouldComponentUpdate(nextProps, nextState, nextContext){
-        if(this.state.counter !== nextState.counter){
-            return true;
-        }
-        return false;
-    }
+
+    // Component ver
+    // shouldComponentUpdate(nextProps, nextState, nextContext){
+    //     if(this.state.counter !== nextState.counter){
+    //         return true;
+    //     }
+    //     return false;
+    // }
     onClick = () => {
-        this.setState({counter: this.state.counter+1})
+        // Do not assign the array like this...
+        // const array2 = this.state.array1;
+        // array2.push(2);
+        // this.setState({
+        //     array1: array2
+        // })
+        this.setState({
+            array1: [...this.state.array1, 2]
+        })
     }
     render() {
+        console.log(this.state)
         return (
             <div> 
                 <button onClick={this.onClick}>Click</button>
