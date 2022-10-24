@@ -1,4 +1,4 @@
-import  React, { Component, useState, useRef, useCallback }  from 'react';
+import  React, { Component, useState, useRef, useCallback, createRef }  from 'react';
 import Try from './components/Try';
 
 function getNumbers(){
@@ -79,22 +79,23 @@ class NumberBaseball extends Component {
                         
                     }
                 })
-                this.input.focus();
+                //this.inputRef.focus();
+                this.inputRef.current.focus();
             }
         }
     }
 
-    input;
-    onRefInput = (c) => {
-        this.input = c;
-    }
+    inputRef = createRef();
+    // onRefInput = (c) => {
+    //     this.input = c;
+    // }
 
     render(){
         return (
             <div>
                 <p>Number Baseball Game</p>
                 <form onSubmit={this.onSubmit}>
-                    <input type="text" maxLength={4} minLength={4} value={this.state.value} onChange={this.onChange} ref={this.onRefInput} />
+                    <input type="text" maxLength={4} minLength={4} value={this.state.value} onChange={this.onChange} ref={this.inputRef} />
                     <button>Submit</button>
                 </form>
                 <p>Try: {this.state.tries.length}</p>
