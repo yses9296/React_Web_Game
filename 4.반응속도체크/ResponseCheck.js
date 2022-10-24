@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-// import './App.css';
 
 class ResponseCheck extends Component{
 
@@ -8,7 +7,6 @@ class ResponseCheck extends Component{
         message: 'Start with a Click',
         result: [],
     }
-
 
     timeout;
     startTime;
