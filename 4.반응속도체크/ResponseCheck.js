@@ -9,7 +9,10 @@ class ResponseCheck extends Component{
         result: [],
     }
 
+
     timeout;
+    startTime;
+    endTime;
 
     onClickScreen = (e) => {
         e.preventDefault();
@@ -24,6 +27,7 @@ class ResponseCheck extends Component{
                     state: 'now',
                     message: 'Now Click!'
                 })
+                this.startTime = new Date();
             }, Math.floor(Math.random() * 1000) + 2000); //2~3초 랜덤
 
         }
@@ -35,11 +39,15 @@ class ResponseCheck extends Component{
             })
         }
         else if (this.state.state === 'now'){
-            this.state.result = [...this.state.result, 1];
+            this.endTime = new Date();
+
             console.log(this.state.result)
-            this.setState({
-                state: 'waiting',
-                message: "Start with a Click"
+            this.setState( (prevState) => {
+                return {
+                    state: 'waiting',
+                    message: "Start with a Click",
+                    result: [...prevState.result, this.endTime - this.startTime]
+                }
             })
         }
     }
