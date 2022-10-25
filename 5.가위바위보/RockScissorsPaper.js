@@ -9,6 +9,9 @@ import React, { Component } from 'react';
     componentDidMount(){ //render가 성공적으로 실행되고난 후 실해될 코드
 
     }
+    componentDidUpdate(){ //리렌더링 후
+
+    }
     componentWillUnmount(){ //component가 제거되기 직전
 
     }
