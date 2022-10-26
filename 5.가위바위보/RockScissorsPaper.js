@@ -47,7 +47,7 @@ const RockScissorsPaper = () => {
         }        
     }
 
-    useInterval(changeHand, isRunning ? 100 : null)
+    useInterval(changeHand, isRunning ? 100 : null) //isRunning이 true(100)면 changeHand 실행, false(null)면 멈추기 
 
     const onClickButton = (value) => {
         // clearInterval(interval.current);
