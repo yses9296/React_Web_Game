@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import useInterval from './useInterval'
 
 const rspCoords = {
     Rock: '0',
@@ -21,17 +22,18 @@ const RockScissorsPaper = () => {
     const [result, setResult] = useState('');
     const [score, setScore] = useState(0);
     const [imgCoord, setImgCoord] = useState(rspCoords.Rock);
-    const interval = useRef();
+    const [isRunning, setIsRunning] = useState(true);
 
-    useEffect(() => {
-        //componentDidmount, componentDidUpdate 역할
-        interval.current = setInterval( changeHand, 150 );
-        return () => {
-            //componentWillUnmount 역할
-            clearInterval(interval.current)
-        }
-    }, [imgCoord]); // 두 번째 인자 배열: 바뀌는 값 >> 값이 바뀔 때마다 useEffect 실행
+    // const interval = useRef();
 
+    // useEffect(() => {
+    //     //componentDidmount, componentDidUpdate 역할
+    //     interval.current = setInterval( changeHand, 150 );
+    //     return () => {
+    //         //componentWillUnmount 역할
+    //         clearInterval(interval.current)
+    //     }
+    // }, [imgCoord]); // 두 번째 인자 배열: 바뀌는 값 >> 값이 바뀔 때마다 useEffect 실행
 
     const changeHand = () => {
         if(imgCoord === rspCoords.Rock){
@@ -45,27 +47,34 @@ const RockScissorsPaper = () => {
         }        
     }
 
+    useInterval(changeHand, isRunning ? 100 : null)
+
     const onClickButton = (value) => {
-        clearInterval(interval.current);
-        const myScore = scores[value];
-        const cpuScore = scores[computerChoice(imgCoord)];
-        const diff = myScore - cpuScore;
+        // clearInterval(interval.current);
+        if(isRunning){ //멈췄을 떄 또 클릭하는 것 막기
+            setIsRunning(false);
+        
+            const myScore = scores[value];
+            const cpuScore = scores[computerChoice(imgCoord)];
+            const diff = myScore - cpuScore;
 
-        if(diff === 0){
-            setResult('same')
-        }
-        else if ([-1, 2].includes(diff)){
-            setResult('You Win')
-            setScore((prevScore) => prevScore + 1)
-        }
-        else{
-            setResult('You lose')
-            setScore((prevScore) => prevScore - 1)
-        }
+            if(diff === 0){
+                setResult('same')
+            }
+            else if ([-1, 2].includes(diff)){
+                setResult('You Win')
+                setScore((prevScore) => prevScore + 1)
+            }
+            else{
+                setResult('You lose')
+                setScore((prevScore) => prevScore - 1)
+            }
 
-        setTimeout(() => {
-            interval.current = setInterval( changeHand, 100 )
-        }, 1000)
+            setTimeout(() => {
+                // interval.current = setInterval( changeHand, 100 )
+                setIsRunning(true);
+            }, 1000)
+        }
     }
 
     return (
