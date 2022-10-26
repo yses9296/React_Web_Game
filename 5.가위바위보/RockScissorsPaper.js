@@ -5,50 +5,49 @@ import React, { Component } from 'react';
 
 const rspCoords = {
     Rock: '0',
-    Scissors: '-142px',
+    Scissor: '-142px',
     Paper:'-284px'
 }
 
 const scores = {
-    Rock: 1,
-    Scissors: 0,
+    Scissor: 1,
+    Rock: 0,
     Paper: -1
 }
 const computerChoice = (imgCoord) => {
-
+    return Object.entries(rspCoords).find( (v) => {
+        return v[1] === imgCoord;
+    })[0];
 }
 
  class RockScissorsPaper extends Component {
     state = {
         result: '',
         score: 0,
-        imgCoord: '0'
+        imgCoord: rspCoords.Rock
     }
 
     interval;
     changeHand = () => {
-        this.interval = setInterval( () => {
-            if(this.state.imgCoord === rspCoords.Rock){
-                this.setState({
-                    imgCoord: rspCoords.Scissors
-                })
-            }
-            else if(this.state.imgCoord === rspCoords.Scissors){
-                this.setState({
-                    imgCoord: rspCoords.Paper
-                })
-            }
-            else if(this.state.imgCoord === rspCoords.Paper){
-                this.setState({
-                    imgCoord: rspCoords.Rock
-                })
-            }
-
-        }, 150);
+        if(this.state.imgCoord === rspCoords.Rock){
+            this.setState({
+                imgCoord: rspCoords.Scissor
+            })
+        }
+        else if(this.state.imgCoord === rspCoords.Scissor){
+            this.setState({
+                imgCoord: rspCoords.Paper
+            })
+        }
+        else if(this.state.imgCoord === rspCoords.Paper){
+            this.setState({
+                imgCoord: rspCoords.Rock
+            })
+        }        
     }
 
     componentDidMount(){ //render가 성공적으로 실행되고난 후 실해될 코드 >> 비동기 요청
-        this.changeHand()
+        this.interval = setInterval( this.changeHand, 100 );
     }
     componentDidUpdate(){ //리렌더링 후
 
@@ -61,8 +60,8 @@ const computerChoice = (imgCoord) => {
     onClickButton = (value) => {
         clearInterval(this.interval);
         const myScore = scores[value];
-        const cpuScore = scores[computerChoice(imgCoord)];
-        const diff = myScore - cpuScore
+        const cpuScore = scores[computerChoice(this.state.imgCoord)];
+        const diff = myScore - cpuScore;
 
         if(diff === 0){
             this.setState({
@@ -85,7 +84,10 @@ const computerChoice = (imgCoord) => {
                 }
             })
         }
-        
+
+        setTimeout(() => {
+            this.interval = setInterval( this.changeHand, 100 )
+        }, 1000)
     }
 
 
