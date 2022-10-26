@@ -30,7 +30,7 @@ const RockScissorsPaper = () => {
             //componentWillUnmount 역할
             clearInterval(interval.current)
         }
-    }, [imgCoord]);
+    }, [imgCoord]); // 두 번째 인자 배열: 바뀌는 값 >> 값이 바뀔 때마다 useEffect 실행
 
 
     const changeHand = () => {
