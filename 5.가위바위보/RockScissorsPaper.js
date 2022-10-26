@@ -10,9 +10,12 @@ const rspCoords = {
 }
 
 const scores = {
-    Rock: 0,
-    Scissors: 1,
+    Rock: 1,
+    Scissors: 0,
     Paper: -1
+}
+const computerChoice = (imgCoord) => {
+
 }
 
  class RockScissorsPaper extends Component {
@@ -23,8 +26,7 @@ const scores = {
     }
 
     interval;
-
-    componentDidMount(){ //render가 성공적으로 실행되고난 후 실해될 코드 >> 비동기 요청
+    changeHand = () => {
         this.interval = setInterval( () => {
             if(this.state.imgCoord === rspCoords.Rock){
                 this.setState({
@@ -43,7 +45,10 @@ const scores = {
             }
 
         }, 150);
+    }
 
+    componentDidMount(){ //render가 성공적으로 실행되고난 후 실해될 코드 >> 비동기 요청
+        this.changeHand()
     }
     componentDidUpdate(){ //리렌더링 후
 
@@ -53,7 +58,34 @@ const scores = {
 
     }
 
-    onClickButton = (e) => {
+    onClickButton = (value) => {
+        clearInterval(this.interval);
+        const myScore = scores[value];
+        const cpuScore = scores[computerChoice(imgCoord)];
+        const diff = myScore - cpuScore
+
+        if(diff === 0){
+            this.setState({
+                result: 'Same'
+            })
+        }
+        else if ([-1, 2].includes(diff)){
+            this.setState((prevState) => {
+                return {
+                    result: 'You Win',
+                    score: prevState.score + 1,
+                }
+            })
+        }
+        else{
+            this.setState((prevState) => {
+                return {
+                    result: 'You lose',
+                    score: prevState.score - 1,
+                }
+            })
+        }
+        
     }
 
 
