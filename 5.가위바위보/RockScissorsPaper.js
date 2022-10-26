@@ -82,5 +82,4 @@ const RockScissorsPaper = () => {
     );
 }
 
-
 export default RockScissorsPaper
