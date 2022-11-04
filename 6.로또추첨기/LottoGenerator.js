@@ -26,13 +26,14 @@ const LottoGenerator = () => {
     const timeouts = useRef([]);
 
     const onClickRedo = useCallback( ()=>{
-        console.log('onClickRedo')
+        console.log('onClickRedo');
+        console.log(winNums);
         setWinNums(getWinNumbers());
         setWinBalls([]);
         setBonus(null);
         setRedo(false);
         timeouts.current = [];
-    })
+    }, [winNums])
 
     useEffect( () => {
 
