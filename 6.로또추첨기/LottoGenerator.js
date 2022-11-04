@@ -1,7 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import Ball from './Ball';
 
 function getWinNumbers(){
+    console.log('getWinNumbers')
     const numbers = Array(45).fill().map((v,i) => i +1);
     const shuffle = [];
     while(numbers.length > 0){
@@ -14,32 +15,24 @@ function getWinNumbers(){
 }
 
 const LottoGenerator = () => {
-    const [winNums, setWinNums] = useState(getWinNumbers());
+    // const [winNums, setWinNums] = useState( getWinNumbers());
+        
+    const lottoNumbers = useMemo( () => getWinNumbers(), [] );
+    const [winNums, setWinNums] = useState(lottoNumbers);
+
     const [winBalls, setWinBalls] = useState([]);
     const [bonus, setBonus] = useState(null);
     const [redo, setRedo] = useState(false);
     const timeouts = useRef([]);
 
-    const onClickRedo = ()=>{
+    const onClickRedo = useCallback( ()=>{
+        console.log('onClickRedo')
         setWinNums(getWinNumbers());
         setWinBalls([]);
         setBonus(null);
         setRedo(false);
         timeouts.current = [];
-    }
-
-    const runTimeOuts = () => {
-        for(let i = 0; i < winNums.length - 1; i++){
-            timeouts.current[i] = setTimeout( () => {
-                setWinBalls( (prevBall) => [...prevBall, winNums[i] ] )
-            }, (i + 1) * 600);
-        }
-
-        timeouts.current[6] = setTimeout( () => {
-            setBonus(winNums[6]);
-            setRedo(true)
-        }, 4200)
-    }
+    })
 
     useEffect( () => {
 
