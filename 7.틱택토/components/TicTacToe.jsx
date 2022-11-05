@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from 'react';
+import React, { useState, useReducer, useCallback } from 'react';
 import Table from './Table';
 
 const initialState = {
@@ -7,8 +7,18 @@ const initialState = {
   tableData: [ ['', '', ''], ['', '', ''], ['', '', ''] ]
 }
 
-const reducer = (state, action) => {
+const SET_WINNER = 'SET_WINNER';
 
+const reducer = (state, action) => {
+  switch(action.type){
+    case SET_WINNER:
+      //state.winner = action.winner (X)
+      // 새로운 객체 생성 후 값을 변경하여 넣어주기
+      return{
+        ...state, 
+        winner: action.winner
+      }
+  }
 }
 
 const TicTacToe = () => {
@@ -17,11 +27,14 @@ const TicTacToe = () => {
   // const [turn, setTurn] = useState('O');
   // const [tableData, setTableData] = useState([ ['', '', ''], ['', '', ''], ['', '', ''] ]); //3x3
 
+  const onClickTable = useCallback( () => {
+    dispatch({type: 'SET_WINNER', winner: 'O'}) //action
+  }, [])
 
   return (
     <div>
-      <Table></Table>
-      {winner && <p>{winner} is Winner!</p> }
+      <Table onClick = {onClickTable} tableData={state.tableData}> </Table>
+      {state.winner && <p>{state.winner} is Winner!</p> }
     </div>
   )
 }
