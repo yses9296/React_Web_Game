@@ -1,13 +1,15 @@
-import React, {  } from 'react';
+import React, { useContext } from 'react';
+import {TableContext} from './MineSearch'
 
-const Td = () => {
+const Td = ({rowIndex, cellIndex}) => {
 
-  return (
-    <td></td>
-  );
+    const { tableData } = useContext(TableContext);
+
+    return (
+        <td>{tableData[rowIndex][cellIndex]}</td>
+    );
 
 }
-
 
 
 export default Td;
