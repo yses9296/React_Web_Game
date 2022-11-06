@@ -22,10 +22,20 @@ const Form = () => {
     },[row, cell, mine])
 
     return (
-        <div>
-            <input type="number" placeholder='세로' value={row} onChange={onChangeRow}/>
-            <input type="number" placeholder='가로' value={cell} onChange={onChangeCell}/>
-            <input type="number" placeholder='지뢰' value={mine} onChange={onChangeMine}/>
+        <div className='form_section'>
+            <p>            
+                <label htmlFor="row">Row</label>
+                <input type="number" placeholder='세로' value={row} onChange={onChangeRow}/>
+            </p>
+            <p>
+                <label htmlFor="row">Cell</label>
+                <input type="number" placeholder='가로' value={cell} onChange={onChangeCell}/>
+            </p>
+            <p>
+                <label htmlFor="row">Mine</label>
+                <input type="number" placeholder='지뢰' value={mine} onChange={onChangeMine}/>
+            </p>
+            
             <button onClick={onClickBtn}>Start</button>
         </div>
     );
