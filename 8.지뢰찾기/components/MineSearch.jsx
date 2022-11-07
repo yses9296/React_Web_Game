@@ -88,8 +88,31 @@ const reducer = (state, action) => {
       console.log('case OPEN_CELL');
       const tableData = [...state.tableData];
       tableData[action.row] = [...state.tableData[action.row]];
-      tableData[action.row][action.cell] = CODE.OPENED; //클릭한 셀(칸)이 OPEND로 변경
+      // tableData[action.row][action.cell] = CODE.OPENED; //클릭한 셀(칸)이 OPEND로 변경
 
+      //주변 지뢰 존재 여부 찾기
+      let around = [];
+      if(tableData[action.row-1]){ // 찾고자 하는 셀 위에 줄이 존재하면
+        around = around.concat(
+          tableData[action.row -1][action.cell -1],
+          tableData[action.row -1][action.cell],
+          tableData[action.row -1][action.cell +1],
+        )
+      }
+      around = around.concat(  // 찾고자 하는 셀이 해당하는 줄에서 검사
+        tableData[action.row][action.cell -1],
+        tableData[action.row][action.cell +1],
+      )
+      if(tableData[action.row+1]){  // 찾고자 하는 셀 아래에 줄이 존재하면
+        around = around.concat(
+          tableData[action.row +1][action.cell -1],
+          tableData[action.row +1][action.cell],
+          tableData[action.row +1][action.cell +1],
+        )
+      }
+      const count = around.filter( v => [CODE.MINE, CODE.FLAG_MINE, CODE.QUESTION_MINE].includes(v)).length //주변 지뢰 수 세기
+      tableData[action.row][action.cell] = count;
+      console.log(tableData[action.row][action.cell]);
       return {
         ...state,
         tableData

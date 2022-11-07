@@ -46,7 +46,7 @@ const getTdText = (code) => {
             return '?';
 
         default:
-            return '';
+            return code || '';
     }
 }
 
@@ -82,7 +82,7 @@ const Td = memo(({rowIndex, cellIndex}) => {
     const onRightClickTd = useCallback( (e) => {
         e.preventDefault();
         console.log('onRightClickTd');
-        
+
         if(halted){
             return;
         }
