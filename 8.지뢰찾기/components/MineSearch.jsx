@@ -1,4 +1,4 @@
-import React, { useReducer, createContext, useMemo, useEffect } from 'react';
+import React, { useReducer, createContext, useMemo, useEffect, memo } from 'react';
 import Form from './Form';
 import Table from './Table';
 
@@ -270,7 +270,7 @@ const reducer = (state, action) => {
 
 
 //MineSearch
-const MineSearch = () => {
+const MineSearch = memo( () => {
 
   const [state, dispatch] = useReducer(reducer, initialState);
   const { tableData, halted, timer, result } = state;
@@ -305,7 +305,7 @@ const MineSearch = () => {
     </div>
   );
 
-}
+})
 
 
 
