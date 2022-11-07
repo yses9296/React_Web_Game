@@ -53,9 +53,13 @@ const getTdText = (code) => {
 
 const Td = memo(({rowIndex, cellIndex}) => {
 
-    const { tableData, dispatch } = useContext(TableContext);
+    const { tableData, dispatch, halted } = useContext(TableContext);
 
     const onClickTd = useCallback(() => {
+        if(halted){
+            return;
+        }
+
         switch(tableData[rowIndex][cellIndex]){
             case CODE.OPENED:
             case CODE.FLAG:
@@ -73,11 +77,15 @@ const Td = memo(({rowIndex, cellIndex}) => {
                 return;
         }
 
-    }, [tableData[rowIndex][cellIndex]]);
+    }, [tableData[rowIndex][cellIndex], halted]);
 
     const onRightClickTd = useCallback( (e) => {
         e.preventDefault();
         console.log('onRightClickTd');
+        
+        if(halted){
+            return;
+        }
 
         switch(tableData[rowIndex][cellIndex]) {
             case CODE.NORMAL:
@@ -96,7 +104,7 @@ const Td = memo(({rowIndex, cellIndex}) => {
                 return;
         }
         
-    },[tableData[rowIndex][cellIndex]]);
+    },[tableData[rowIndex][cellIndex], halted]);
 
     return (
         <td style = {getTdStyle(tableData[rowIndex][cellIndex])} onClick={onClickTd} onContextMenu={onRightClickTd}>

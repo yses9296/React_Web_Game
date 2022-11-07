@@ -16,6 +16,7 @@ export const CODE = {
 //createContext
 export const TableContext = createContext({
   tableData: [],
+  halted: true,
   dispatch: () =>{}
 });
 
@@ -166,7 +167,8 @@ const reducer = (state, action) => {
 const MineSearch = () => {
 
   const [state, dispatch] = useReducer(reducer, initialState);
-  const value = useMemo( () => ({tableData: state.tableData, dispatch }), [state.tableData])
+  const { tableData, halted, timer, result } = state;
+  const value = useMemo( () => ({tableData, halted, timer, result, dispatch }), [tableData, halted])
 
   //dispatch={dispatch}
   return (
