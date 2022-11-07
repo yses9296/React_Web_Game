@@ -87,32 +87,78 @@ const reducer = (state, action) => {
     case OPEN_CELL:{
       console.log('case OPEN_CELL');
       const tableData = [...state.tableData];
-      tableData[action.row] = [...state.tableData[action.row]];
+      // tableData[action.row] = [...state.tableData[action.row]];
       // tableData[action.row][action.cell] = CODE.OPENED; //클릭한 셀(칸)이 OPEND로 변경
+      tableData.forEach( (row,i) => {
+        // tableData[i] = [...row]
+        tableData[i] = [...state.tableData[i]]
+      })
 
       //주변 지뢰 존재 여부 찾기
-      let around = [];
-      if(tableData[action.row-1]){ // 찾고자 하는 셀 위에 줄이 존재하면
-        around = around.concat(
-          tableData[action.row -1][action.cell -1],
-          tableData[action.row -1][action.cell],
-          tableData[action.row -1][action.cell +1],
+      const checked = []; //이미 연 칸은 다시 열지 않도록 캐싱
+      const checkAround = ( (row, cell) => {
+        console.log(row, cell)
+        if([CODE.OPENED, CODE.FLAG_MINE, CODE.FLAG, CODE.QUESTION, CODE.QUESTION_MINE].includes(tableData[row][cell])){
+          return;
+        }
+        if( row < 0 || row >= tableData.length || cell < 0 || cell >= tableData[0].length){ //상하좌우 칸이 아닌 경우 필터링
+          return;
+        }
+        if(checked.includes(row + ',' + cell)){ //이미 검사한 칸이면
+          return ;
+        }
+        else{
+          checked.push(row + ',' + cell)
+        }
+        let around = [];
+        if(tableData[row-1]){ // 찾고자 하는 셀 위에 줄이 존재하면
+          around = around.concat(
+            tableData[row -1][cell -1],
+            tableData[row -1][cell],
+            tableData[row -1][cell +1],
+          )
+        }
+        around = around.concat(  // 찾고자 하는 셀이 해당하는 줄에서 검사
+          tableData[row][cell -1],
+          tableData[row][cell +1],
         )
-      }
-      around = around.concat(  // 찾고자 하는 셀이 해당하는 줄에서 검사
-        tableData[action.row][action.cell -1],
-        tableData[action.row][action.cell +1],
-      )
-      if(tableData[action.row+1]){  // 찾고자 하는 셀 아래에 줄이 존재하면
-        around = around.concat(
-          tableData[action.row +1][action.cell -1],
-          tableData[action.row +1][action.cell],
-          tableData[action.row +1][action.cell +1],
-        )
-      }
-      const count = around.filter( v => [CODE.MINE, CODE.FLAG_MINE, CODE.QUESTION_MINE].includes(v)).length //주변 지뢰 수 세기
-      tableData[action.row][action.cell] = count;
-      console.log(tableData[action.row][action.cell]);
+        if(tableData[action.row+1]){  // 찾고자 하는 셀 아래에 줄이 존재하면
+          around = around.concat(
+            tableData[row +1][cell -1],
+            tableData[row +1][cell],
+            tableData[row +1][cell +1],
+          )
+        }
+        const count = around.filter( v => [CODE.MINE, CODE.FLAG_MINE, CODE.QUESTION_MINE].includes(v)).length //주변 지뢰 수 세기
+        tableData[row][cell] = count;
+        console.log(around, count);
+        //주변 지뢰가 0인 모든 셀 열기 (재귀)
+        if(count === 0){
+          if (row > -1) {
+            const near = [];
+            if(row - 1 > -1){ //내가 맨 위의 줄 칸을 선택했을 때 윗줄은 없기에 해당 X
+              near.push([row-1, cell -1])
+              near.push([row-1, cell])
+              near.push([row-1, cell +1])
+            }
+            near.push([row, cell -1])
+            near.push([row, cell +1]) 
+            if(row + 1 < tableData.length){ //내가 맨 아래의 줄 칸을 선택했을 때 아랫줄은 없기에 해당 X
+              near.push([row +1, cell -1])
+              near.push([row +1, cell])
+              near.push([row +1, cell +1])
+            }
+            near.forEach( n => {
+              if(tableData[n[0]][n[1]] !== CODE.OPENED){
+                checkAround(n[0], n[1])
+              }
+              
+            })
+          }
+        }
+      })
+
+      checkAround(action.row, action.cell);      
       return {
         ...state,
         tableData
