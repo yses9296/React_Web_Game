@@ -1,4 +1,4 @@
-import React, { useReducer, createContext, useMemo } from 'react';
+import React, { useReducer, createContext, useMemo, useEffect } from 'react';
 import Form from './Form';
 import Table from './Table';
 
@@ -30,7 +30,8 @@ const initialState = {
   },
   timer: 0,
   result:'',
-  halted: false
+  halted: true,
+  opendCount: 0
 }
 
 
@@ -74,6 +75,7 @@ export const CLICK_MINE = 'CLICK_MINE';
 export const FLAG_CELL = 'FLAG_CELL';
 export const QUESTION_CELL = 'QUESTION_CELL';
 export const NORMALIZE_CELL = 'NORMALIZE_CELL';
+export const INCREAMENT_TIMER = 'INCREAMENT_TIMER';
 const reducer = (state, action) => {
   switch(action.type){
     case START_GAME:
@@ -81,7 +83,15 @@ const reducer = (state, action) => {
       return {
         ...state,
         tableData: plantMine(action.row, action.cell, action.mine),
-        halted: false
+        data: {
+          row: action.row, 
+          cell: action.cell, 
+          mine: action.mine
+        },
+        timer: 0,
+        result:'',
+        halted: false,
+        openedCount: 0,
       }
 
     case OPEN_CELL:{
@@ -95,9 +105,10 @@ const reducer = (state, action) => {
       })
 
       //주변 지뢰 존재 여부 찾기
+      let openedCount = 0;
       const checked = []; //이미 연 칸은 다시 열지 않도록 캐싱
       const checkAround = ( (row, cell) => {
-        console.log(row, cell)
+        // console.log(row, cell)
         if([CODE.OPENED, CODE.FLAG_MINE, CODE.FLAG, CODE.QUESTION, CODE.QUESTION_MINE].includes(tableData[row][cell])){
           return;
         }
@@ -110,6 +121,7 @@ const reducer = (state, action) => {
         else{
           checked.push(row + ',' + cell)
         }
+
         let around = [];
         if(tableData[row-1]){ // 찾고자 하는 셀 위에 줄이 존재하면
           around = around.concat(
@@ -130,8 +142,7 @@ const reducer = (state, action) => {
           )
         }
         const count = around.filter( v => [CODE.MINE, CODE.FLAG_MINE, CODE.QUESTION_MINE].includes(v)).length //주변 지뢰 수 세기
-        tableData[row][cell] = count;
-        console.log(around, count);
+        
         //주변 지뢰가 0인 모든 셀 열기 (재귀)
         if(count === 0){
           if (row > -1) {
@@ -156,12 +167,32 @@ const reducer = (state, action) => {
             })
           }
         }
+
+        if(tableData[row][cell] === CODE.NORMAL){ // 내 칸이 닫힌 칸이면 카운트 증가 (이미 연 칸은 count 제외)
+          openedCount += 1;
+        }
+
+        tableData[row][cell] = count;
+        // console.log(around, count);
       })
 
       checkAround(action.row, action.cell);      
+      
+      let halted = false;
+      let result = '';
+
+      console.log(state.data.row * state.data.cell - state.data.mine, state.openedCount, openedCount);
+      if(state.data.row * state.data.cell - state.data.mine === state.opendCount + openedCount){ //승리 조건
+        halted = true;
+        result = `You completed in ${state.timer}sec!`
+      }
+      console.log("Win condition: " + state.data.row * state.data.cell - state.data.mine)
       return {
         ...state,
-        tableData
+        tableData,
+        opendCount: state.opendCount + openedCount,
+        halted,
+        result
       }
     }
 
@@ -223,6 +254,12 @@ const reducer = (state, action) => {
         tableData
       }
     }
+    case INCREAMENT_TIMER: {
+      return {
+        ...state,
+        timer: state.timer + 1
+      }
+    }
   
     default:
       return state
@@ -239,17 +276,31 @@ const MineSearch = () => {
   const { tableData, halted, timer, result } = state;
   const value = useMemo( () => ({tableData, halted, timer, result, dispatch }), [tableData, halted])
 
-  //dispatch={dispatch}
+  useEffect( () => {
+    let timer;
+
+    if(halted === false){
+      timer = setInterval( () => {
+        dispatch({type: INCREAMENT_TIMER})
+      }, 1000)
+    }
+
+    return () => {
+      clearInterval(timer);
+    }
+
+  }, [halted]);
+
   return (
     <div id="container">
       <TableContext.Provider value={ value }>
         <Form ></Form>
 
-        <p>{state.timer}</p>
+        <p>{timer}</p>
 
         <Table ></Table>
 
-        <div>{state.result}</div>
+        <div>{result}</div>
       </TableContext.Provider>
     </div>
   );
