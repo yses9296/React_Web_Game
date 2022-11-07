@@ -28,7 +28,8 @@ const initialState = {
     mine: 0,
   },
   timer: 0,
-  result:''
+  result:'',
+  halted: false
 }
 
 
@@ -78,14 +79,16 @@ const reducer = (state, action) => {
       console.log('case START_GAME');
       return {
         ...state,
-        tableData: plantMine(action.row, action.cell, action.mine)
+        tableData: plantMine(action.row, action.cell, action.mine),
+        halted: false
       }
 
     case OPEN_CELL:{
+      console.log('case OPEN_CELL');
       const tableData = [...state.tableData];
       tableData[action.row] = [...state.tableData[action.row]];
       tableData[action.row][action.cell] = CODE.OPENED; //클릭한 셀(칸)이 OPEND로 변경
-      console.log('case OPEN_CELL');
+
       return {
         ...state,
         tableData
@@ -94,7 +97,61 @@ const reducer = (state, action) => {
 
     case CLICK_MINE:{
       console.log('case CLICK_MINE');
-      return;
+      const tableData = [...state.tableData];
+      tableData[action.row] = [...state.tableData[action.row]];
+      tableData[action.row][action.cell] = CODE.CLICKED_MINE
+
+      return {
+        ...state,
+        tableData,
+        halted: true //게임 중단
+      }
+    }
+
+    case FLAG_CELL:{
+      console.log('case FLAG_CELL');
+      const tableData = [...state.tableData];
+      tableData[action.row] = [...state.tableData[action.row]];
+      if (tableData[action.row][action.cell] === CODE.MINE) {
+        tableData[action.row][action.cell] = CODE.FLAG_MINE
+      }
+      else {
+        tableData[action.row][action.cell] = CODE.FLAG
+      }
+      return {
+        ...state,
+        tableData
+      }
+    }
+    case QUESTION_CELL:{
+      console.log('case QUESTION_CELL');
+      const tableData = [...state.tableData];
+      tableData[action.row] = [...state.tableData[action.row]];
+      if (tableData[action.row][action.cell] === CODE.FLAG_MINE) {
+        tableData[action.row][action.cell] = CODE.QUESTION_MINE
+      }
+      else {
+        tableData[action.row][action.cell] = CODE.QUESTION
+      }
+      return {
+        ...state,
+        tableData
+      }
+    }
+    case NORMALIZE_CELL:{
+      console.log('case NORMALIZE_CELL');
+      const tableData = [...state.tableData];
+      tableData[action.row] = [...state.tableData[action.row]];
+      if (tableData[action.row][action.cell] === CODE.QUESTION_MINE) {
+        tableData[action.row][action.cell] = CODE.MINE
+      }
+      else {
+        tableData[action.row][action.cell] = CODE.NORMAL
+      }
+      return {
+        ...state,
+        tableData
+      }
     }
   
     default:
